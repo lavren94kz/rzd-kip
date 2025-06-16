@@ -5,6 +5,29 @@
 import type PocketBase from "pocketbase";
 import type { RecordService } from "pocketbase";
 
+
+export type TripsRecord = {
+  created?: IsoDateString;
+  id: string;
+  start_datetime: IsoDateString;
+  username: RecordIdString; // Relation to users table
+  target: "KIP" | "CP" | "KZP";
+  station: string;
+  driver: string;
+  assistant_driver?: string;
+  route: string;
+  train_number: string;
+  locomotive: "Mercedes" | "Honda" | "BMW";
+  locomotive_number: string;
+  end_datetime: IsoDateString;
+  user: RecordIdString;
+  updated?: IsoDateString;
+};
+
+export type TripsResponse<Texpand = unknown> = Required<TripsRecord> &
+  BaseSystemFields<Texpand>;
+
+// Update Collections enum
 export enum Collections {
   Authorigins = "_authOrigins",
   Externalauths = "_externalAuths",
@@ -13,6 +36,7 @@ export enum Collections {
   Superusers = "_superusers",
   Users = "users",
   Todos = "todos",
+  Trips = "trips", // Add this line
 }
 
 // Alias types for improved usability
@@ -137,6 +161,7 @@ export type CollectionRecords = {
   _superusers: SuperusersRecord;
   users: UsersRecord;
   todos: TodosRecord;
+  trips: TripsRecord; // Add this line
 };
 
 export type CollectionResponses = {
@@ -147,6 +172,7 @@ export type CollectionResponses = {
   _superusers: SuperusersResponse;
   users: UsersResponse;
   todos: TodosResponse;
+  trips: TripsResponse; // Add this line
 };
 
 // Type for usage with type asserted PocketBase instance
@@ -160,4 +186,6 @@ export type TypedPocketBase = PocketBase & {
   collection(idOrName: "_superusers"): RecordService<SuperusersResponse>;
   collection(idOrName: "users"): RecordService<UsersResponse>;
   collection(idOrName: "todos"): RecordService<TodosResponse>;
+  collection(idOrName: "trips"): RecordService<TripsResponse>; // Add this line
 };
+

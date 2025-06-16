@@ -1,11 +1,11 @@
-// Updated src/middleware.ts
+// Updated src/middleware.ts - Add trips routes protection
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { fallbackLng, languages } from "./app/i18n/settings";
 import { createServerClient } from "@/lib/pocketbase/server";
 
 // Protected routes that require authentication
-const protectedRoutes = ["/dashboard", "/todos"];
+const protectedRoutes = ["/dashboard", "/todos", "/trips", "/all-trips"];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

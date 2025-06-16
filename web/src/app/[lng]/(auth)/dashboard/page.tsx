@@ -1,8 +1,9 @@
-// Updated src/app/[lng]/(auth)/dashboard/page.tsx
+// Updated src/app/[lng]/(auth)/dashboard/page.tsx - Add trip stats
 import { createServerClient } from "@/lib/pocketbase/server";
 import { DashboardClient } from "./page-client";
-import { Settings, Activity, CheckSquare, Plus } from "lucide-react";
+import { Settings, Activity, CheckSquare, Plus, MapPin } from "lucide-react";
 import { getTodos } from "@/lib/actions/todos";
+import { getTrips } from "@/lib/actions/trips";
 import Link from "next/link";
 
 export default async function Dashboard({
@@ -21,6 +22,13 @@ export default async function Dashboard({
     overdue: 0,
   };
 
+  // Get trip stats  
+  let tripStats = {
+    total: 0,
+    thisWeek: 0,
+    thisMonth: 0,
+  };
+
   try {
     const todos = await getTodos();
     const now = new Date();
@@ -37,6 +45,25 @@ export default async function Dashboard({
     };
   } catch (error) {
     console.error("Failed to fetch todo stats:", error);
+  }
+
+  try {
+    const trips = await getTrips();
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    
+    tripStats = {
+      total: trips.totalItems,
+      thisWeek: trips.items.filter(trip => 
+        new Date(trip.start_datetime) >= weekAgo
+      ).length,
+      thisMonth: trips.items.filter(trip => 
+        new Date(trip.start_datetime) >= monthAgo
+      ).length,
+    };
+  } catch (error) {
+    console.error("Failed to fetch trip stats:", error);
   }
 
   return (
@@ -61,11 +88,25 @@ export default async function Dashboard({
             New Todo
           </Link>
           <Link
+            href={`/${lng}/trips/new`}
+            className="btn btn-secondary"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New Trip
+          </Link>
+          <Link
             href={`/${lng}/todos?filter=active&sort=-priority`}
             className="btn btn-outline"
           >
             <CheckSquare className="h-4 w-4 mr-2" />
             High Priority Tasks
+          </Link>
+          <Link
+            href={`/${lng}/all-trips`}
+            className="btn btn-outline"
+          >
+            <MapPin className="h-4 w-4 mr-2" />
+            View All Trips
           </Link>
           {todoStats.overdue > 0 && (
             <Link
@@ -132,6 +173,42 @@ export default async function Dashboard({
         </div>
       </div>
 
+      {/* Trip Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="stat bg-base-100 rounded-lg shadow-md">
+          <div className="stat-figure text-accent">
+            <MapPin className="w-8 h-8" />
+          </div>
+          <div className="stat-title">Total Trips</div>
+          <div className="stat-value text-accent">{tripStats.total}</div>
+          <div className="stat-desc">
+            {tripStats.total === 0 ? "No trips yet" : "All time"}
+          </div>
+        </div>
+
+        <div className="stat bg-base-100 rounded-lg shadow-md">
+          <div className="stat-figure text-secondary">
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="stat-title">This Week</div>
+          <div className="stat-value text-secondary">{tripStats.thisWeek}</div>
+          <div className="stat-desc">Last 7 days</div>
+        </div>
+
+        <div className="stat bg-base-100 rounded-lg shadow-md">
+          <div className="stat-figure text-neutral">
+            <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <div className="stat-title">This Month</div>
+          <div className="stat-value text-neutral">{tripStats.thisMonth}</div>
+          <div className="stat-desc">Last 30 days</div>
+        </div>
+      </div>
+
       {/* Overdue Alert */}
       {todoStats.overdue > 0 && (
         <div className="alert alert-error">
@@ -150,34 +227,58 @@ export default async function Dashboard({
         </div>
       )}
 
-      {/* Recent Activity */}
-      <div className="bg-base-100 rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">Todo Summary</h2>
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <span>Completion Rate</span>
-            <span className="font-semibold">
-              {todoStats.total > 0 
-                ? `${Math.round((todoStats.completed / todoStats.total) * 100)}%`
-                : '0%'
-              }
-            </span>
-          </div>
-          {todoStats.total > 0 && (
-            <div className="w-full bg-base-300 rounded-full h-2">
-              <div 
-                className="bg-success h-2 rounded-full transition-all"
-                style={{ 
-                  width: `${(todoStats.completed / todoStats.total) * 100}%` 
-                }}
-              ></div>
+      {/* Activity Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Todo Summary */}
+        <div className="bg-base-100 rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4">Todo Summary</h2>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span>Completion Rate</span>
+              <span className="font-semibold">
+                {todoStats.total > 0 
+                  ? `${Math.round((todoStats.completed / todoStats.total) * 100)}%`
+                  : '0%'
+                }
+              </span>
             </div>
-          )}
-          <div className="text-sm text-base-content/60 pt-2">
-            {todoStats.total === 0 
-              ? "Create your first todo to get started!"
-              : `You've completed ${todoStats.completed} out of ${todoStats.total} total tasks.`
-            }
+            {todoStats.total > 0 && (
+              <div className="w-full bg-base-300 rounded-full h-2">
+                <div 
+                  className="bg-success h-2 rounded-full transition-all"
+                  style={{ 
+                    width: `${(todoStats.completed / todoStats.total) * 100}%` 
+                  }}
+                ></div>
+              </div>
+            )}
+            <div className="text-sm text-base-content/60 pt-2">
+              {todoStats.total === 0 
+                ? "Create your first todo to get started!"
+                : `You've completed ${todoStats.completed} out of ${todoStats.total} total tasks.`
+              }
+            </div>
+          </div>
+        </div>
+
+        {/* Trip Summary */}
+        <div className="bg-base-100 rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4">Trip Activity</h2>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span>Weekly Activity</span>
+              <span className="font-semibold">{tripStats.thisWeek} trips</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>Monthly Activity</span>
+              <span className="font-semibold">{tripStats.thisMonth} trips</span>
+            </div>
+            <div className="text-sm text-base-content/60 pt-2">
+              {tripStats.total === 0 
+                ? "Record your first trip to get started!"
+                : `You've logged ${tripStats.total} total trips.`
+              }
+            </div>
           </div>
         </div>
       </div>

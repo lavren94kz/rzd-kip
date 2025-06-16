@@ -1,4 +1,4 @@
-// Updated src/components/ui/navbar.tsx
+// Updated src/components/ui/navbar.tsx - Add trips navigation
 "use client";
 
 import { logout } from "@/lib/actions/auth";
@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "../pocketbase-provider";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
-import { Menu, X, CheckSquare } from "lucide-react";
+import { Menu, X, CheckSquare, MapPin, Eye } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ClientWrapper } from "./client-wrapper";
@@ -66,12 +66,26 @@ export function Navbar({ lng }: { lng: string }) {
                 </Link>
               </li>
               {user && (
-                <li>
-                  <Link href={`/${lng}/todos`} className={linkStyle("/todos")}>
-                    <CheckSquare className="h-4 w-4 mr-2" />
-                    Todos
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link href={`/${lng}/todos`} className={linkStyle("/todos")}>
+                      <CheckSquare className="h-4 w-4 mr-2" />
+                      Todos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={`/${lng}/trips`} className={linkStyle("/trips")}>
+                      <MapPin className="h-4 w-4 mr-2" />
+                      My Trips
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={`/${lng}/all-trips`} className={linkStyle("/all-trips")}>
+                      <Eye className="h-4 w-4 mr-2" />
+                      All Trips
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </div>
@@ -158,14 +172,32 @@ export function Navbar({ lng }: { lng: string }) {
             </Link>
             
             {user && (
-              <Link
-                href={`/${lng}/todos`}
-                className={`block ${linkStyle("/todos")}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <CheckSquare className="h-4 w-4 mr-2" />
-                Todos
-              </Link>
+              <>
+                <Link
+                  href={`/${lng}/todos`}
+                  className={`block ${linkStyle("/todos")}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <CheckSquare className="h-4 w-4 mr-2" />
+                  Todos
+                </Link>
+                <Link
+                  href={`/${lng}/trips`}
+                  className={`block ${linkStyle("/trips")}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <MapPin className="h-4 w-4 mr-2" />
+                  My Trips
+                </Link>
+                <Link
+                  href={`/${lng}/all-trips`}
+                  className={`block ${linkStyle("/all-trips")}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Eye className="h-4 w-4 mr-2" />
+                  All Trips
+                </Link>
+              </>
             )}
 
             {user ? (
