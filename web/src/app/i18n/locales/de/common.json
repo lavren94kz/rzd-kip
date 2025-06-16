@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "about": "Über"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Konto erstellen",
+    "email": "E-Mail",
+    "emailPlaceholder": "Ihre E-Mail-Adresse",
+    "password": "Passwort",
+    "passwordPlaceholder": "Ihr Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "confirmPasswordPlaceholder": "Passwort wiederholen",
+    "loginError": "Ungültige E-Mail oder Passwort",
+    "registrationFailed": "Registrierung fehlgeschlagen",
+    "name": {
+      "label": "Name",
+      "placeholder": "Ihren Namen eingeben",
+      "tooShort": "Name muss mindestens 4 Zeichen lang sein",
+      "taken": "Dieser Name ist bereits vergeben",
+      "available": "Dieser Name ist verfügbar",
+      "checkError": "Fehler bei der Überprüfung des Namens"
+    }
+  },
+  "footer": {
+    "about": "Über uns",
+    "description": "Ein modernes Authentifizierungssystem mit Next.js und PocketBase",
+    "quickLinks": "Schnellzugriff",
+    "resources": "Ressourcen",
+    "connect": "Kontakt",
+    "emailUs": "E-Mail senden",
+    "copyright": "© {{year}} PB-Next. Alle Rechte vorbehalten."
+  }
+}

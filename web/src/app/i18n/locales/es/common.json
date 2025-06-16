@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "logout": "Cerrar sesión",
+    "about": "About"
+  },
+  "auth": {
+    "register": "Registrarse",
+    "login": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "Ingrese su correo electrónico",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Ingrese su contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Confirme su contraseña",
+    "name": {
+      "label": "Nombre",
+      "placeholder": "Ingrese su nombre",
+      "tooShort": "El nombre debe tener al menos 4 caracteres",
+      "taken": "Este nombre ya está en uso",
+      "available": "Este nombre está disponible",
+      "checkError": "Error al verificar la disponibilidad del nombre"
+    },
+    "registrationFailed": "Error en el registro",
+    "errors": {
+      "This name is already taken": "Este nombre ya está en uso",
+      "This email is already registered": "Este correo ya está registrado",
+      "Invalid email or password": "Correo o contraseña inválidos",
+      "Passwords do not match": "Las contraseñas no coinciden"
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "settings": "Ajustes",
+    "serverInfo": "Información del servidor",
+    "clientInfo": "Información del cliente",
+    "recentActivity": "Actividad reciente",
+    "profile": "Perfil",
+    "sessions": "Sesiones",
+    "activity": "Actividad"
+  },
+  "footer": {
+    "about": "Sobre Nosotros",
+    "description": "Un sistema de autenticación moderno construido con Next.js y PocketBase. Seguro, rápido y fácil de usar.",
+    "quickLinks": "Enlaces Rápidos",
+    "resources": "Recursos",
+    "connect": "Conéctate con Nosotros",
+    "emailUs": "Envíanos un Email",
+    "copyright": "© {{year}} PB-Next. Todos los derechos reservados."
+  }
+}

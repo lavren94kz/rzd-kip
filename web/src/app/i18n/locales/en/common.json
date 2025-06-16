@@ -1,0 +1,55 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Log out",
+    "about": "About"
+  },
+  "auth": {
+    "register": "Register",
+    "login": "Login",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "loginError": "Incorrect email or password",
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter your name",
+      "tooShort": "Name must be at least 4 characters long",
+      "taken": "This name is already taken",
+      "available": "This name is available",
+      "checkError": "Error checking name availability"
+    },
+    "registrationFailed": "Registration failed",
+    "errors": {
+      "This name is already taken": "This name is already taken",
+      "This email is already registered": "This email is already registered",
+      "Invalid email or password": "Invalid email or password",
+      "Passwords do not match": "Passwords do not match"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "settings": "Settings",
+    "serverInfo": "Server Information",
+    "clientInfo": "Client Information",
+    "recentActivity": "Recent Activity",
+    "profile": "Profile",
+    "sessions": "Sessions",
+    "activity": "Activity"
+  },
+  "footer": {
+    "about": "About Us",
+    "description": "A modern authentication system built with Next.js and PocketBase. Secure, fast, and easy to use.",
+    "quickLinks": "Quick Links",
+    "resources": "Resources",
+    "connect": "Connect With Us",
+    "emailUs": "Email Us",
+    "copyright": "© {{year}} PB-Next. All rights reserved."
+  }
+}

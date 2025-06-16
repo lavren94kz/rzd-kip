@@ -1,0 +1,23 @@
+{
+    "about": {
+      "title": "Über Uns",
+      "description": "Willkommen auf unserer Plattform",
+      "mission": {
+        "title": "Unsere Mission",
+        "text": "Wir streben danach, die beste Authentifizierungslösung mit PocketBase und Next.js anzubieten"
+      },
+      "features": {
+        "title": "Hauptfunktionen",
+        "list": {
+          "1": "Sichere Authentifizierung",
+          "2": "Mehrsprachige Unterstützung",
+          "3": "Moderner Technologie-Stack",
+          "4": "Einfache Integration"
+        }
+      },
+      "contact": {
+        "title": "Kontaktieren Sie uns",
+        "text": "Haben Sie Fragen? Kontaktieren Sie uns gerne"
+      }
+    }
+  }

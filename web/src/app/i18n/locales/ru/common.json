@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "home": "Главная",
+    "dashboard": "Панель управления",
+    "login": "Войти",
+    "register": "Регистрация",
+    "logout": "Выйти",
+    "about": "About"
+  },
+  "auth": {
+    "login": "Вход",
+    "register": "Создать аккаунт",
+    "email": "Email",
+    "emailPlaceholder": "Введите ваш email",
+    "password": "Пароль",
+    "passwordPlaceholder": "Введите ваш пароль",
+    "confirmPassword": "Подтверждение пароля",
+    "confirmPasswordPlaceholder": "Подтвердите ваш пароль",
+    "loginError": "Неверный email или пароль",
+    "registrationFailed": "Ошибка регистрации",
+    "name": {
+      "label": "Имя",
+      "placeholder": "Введите ваше имя",
+      "tooShort": "Имя должно содержать минимум 4 символа",
+      "taken": "Это имя уже занято",
+      "available": "Это имя доступно",
+      "checkError": "Ошибка при проверке имени"
+    }
+  },
+  "footer": {
+    "about": "О нас",
+    "description": "Современная система аутентификации на базе Next.js и PocketBase",
+    "quickLinks": "Быстрые ссылки",
+    "resources": "Ресурсы",
+    "connect": "Связаться с нами",
+    "emailUs": "Написать нам",
+    "copyright": "© {{year}} PB-Next. Все права защищены."
+  }
+}
