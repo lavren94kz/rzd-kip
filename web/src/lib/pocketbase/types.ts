@@ -12,6 +12,7 @@ export enum Collections {
   Otps = "_otps",
   Superusers = "_superusers",
   Users = "users",
+  Todos = "todos",
 }
 
 // Alias types for improved usability
@@ -98,6 +99,18 @@ export type UsersRecord = {
   verified?: boolean;
 };
 
+export type TodosRecord = {
+  created?: IsoDateString;
+  id: string;
+  title: string;
+  description?: string;
+  completed?: boolean;
+  priority?: "low" | "medium" | "high";
+  due_date?: IsoDateString;
+  user: RecordIdString;
+  updated?: IsoDateString;
+};
+
 // Response types include system fields and match responses from the PocketBase API
 export type AuthoriginsResponse<Texpand = unknown> =
   Required<AuthoriginsRecord> & BaseSystemFields<Texpand>;
@@ -111,6 +124,8 @@ export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> &
   AuthSystemFields<Texpand>;
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> &
   AuthSystemFields<Texpand>;
+export type TodosResponse<Texpand = unknown> = Required<TodosRecord> &
+  BaseSystemFields<Texpand>;
 
 // Types containing all Records and Responses, useful for creating typing helper functions
 
@@ -121,6 +136,7 @@ export type CollectionRecords = {
   _otps: OtpsRecord;
   _superusers: SuperusersRecord;
   users: UsersRecord;
+  todos: TodosRecord;
 };
 
 export type CollectionResponses = {
@@ -130,6 +146,7 @@ export type CollectionResponses = {
   _otps: OtpsResponse;
   _superusers: SuperusersResponse;
   users: UsersResponse;
+  todos: TodosResponse;
 };
 
 // Type for usage with type asserted PocketBase instance
@@ -142,4 +159,5 @@ export type TypedPocketBase = PocketBase & {
   collection(idOrName: "_otps"): RecordService<OtpsResponse>;
   collection(idOrName: "_superusers"): RecordService<SuperusersResponse>;
   collection(idOrName: "users"): RecordService<UsersResponse>;
+  collection(idOrName: "todos"): RecordService<TodosResponse>;
 };

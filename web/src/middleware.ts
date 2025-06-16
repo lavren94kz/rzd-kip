@@ -1,10 +1,11 @@
+// Updated src/middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { fallbackLng, languages } from "./app/i18n/settings";
 import { createServerClient } from "@/lib/pocketbase/server";
 
 // Protected routes that require authentication
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/todos"];
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

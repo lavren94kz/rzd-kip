@@ -1,3 +1,4 @@
+// Updated src/components/ui/navbar.tsx
 "use client";
 
 import { logout } from "@/lib/actions/auth";
@@ -6,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "../pocketbase-provider";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./language-switcher";
-import { Menu, X } from "lucide-react";
+import { Menu, X, CheckSquare } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ClientWrapper } from "./client-wrapper";
@@ -30,7 +31,7 @@ export function Navbar({ lng }: { lng: string }) {
   };
 
   const isActive = (path: string) => {
-    return pathname === `/${lng}${path}`;
+    return pathname === `/${lng}${path}` || pathname.startsWith(`/${lng}${path}/`);
   };
 
   const linkStyle = (path: string) => `
@@ -57,11 +58,23 @@ export function Navbar({ lng }: { lng: string }) {
             </Link>
           </div>
 
-          <li>
-            <Link href={`/${lng}/about`} className={linkStyle("/about")}>
-              {t("nav.about")}
-            </Link>
-          </li>
+          <div className="navbar-center hidden md:flex">
+            <ul className="flex items-center space-x-2">
+              <li>
+                <Link href={`/${lng}/about`} className={linkStyle("/about")}>
+                  {t("nav.about")}
+                </Link>
+              </li>
+              {user && (
+                <li>
+                  <Link href={`/${lng}/todos`} className={linkStyle("/todos")}>
+                    <CheckSquare className="h-4 w-4 mr-2" />
+                    Todos
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
 
           <div className="navbar-end flex md:hidden">
             <LanguageSwitcher lng={lng} />
@@ -131,29 +144,48 @@ export function Navbar({ lng }: { lng: string }) {
         <div
           className={`
         md:hidden transition-all duration-300 ease-in-out
-        ${isMenuOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"}
+        ${isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}
         overflow-hidden bg-base-100
       `}
         >
           <div className="px-4 py-2 space-y-2">
+            <Link
+              href={`/${lng}/about`}
+              className={`block ${linkStyle("/about")}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {t("nav.about")}
+            </Link>
+            
+            {user && (
+              <Link
+                href={`/${lng}/todos`}
+                className={`block ${linkStyle("/todos")}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <CheckSquare className="h-4 w-4 mr-2" />
+                Todos
+              </Link>
+            )}
+
             {user ? (
               <>
-                <li>
-                  <Link
-                    href={`/${lng}/dashboard`}
-                    className={linkStyle("/dashboard")}
-                  >
-                    {user.name || user.email}
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={handleLogout}
-                    className="px-4 py-2 rounded-md hover:bg-base-200 transition-colors"
-                  >
-                    {t("nav.logout")}
-                  </button>
-                </li>
+                <Link
+                  href={`/${lng}/dashboard`}
+                  className={`block ${linkStyle("/dashboard")}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {user.name || user.email}
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 rounded-md hover:bg-base-200 transition-colors"
+                >
+                  {t("nav.logout")}
+                </button>
               </>
             ) : (
               <>

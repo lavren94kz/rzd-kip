@@ -1,0 +1,91 @@
+{
+  "todos": {
+    "title": "Todos",
+    "myTodos": "My Todos",
+    "newTodo": "New Todo",
+    "createTodo": "Create Todo",
+    "editTodo": "Edit Todo",
+    "updateTodo": "Update Todo",
+    "deleteTodo": "Delete Todo",
+    "markComplete": "Mark Complete",
+    "markIncomplete": "Mark Incomplete",
+    "noTodos": "No todos yet",
+    "noTodosSubtext": "Create your first todo to get started!",
+    "noMatch": "No todos match your criteria",
+    "searchPlaceholder": "Search todos...",
+    "filters": "Filters",
+    "sortBy": "Sort by",
+    "quickFilters": "Quick Filters",
+    "stats": {
+      "total": "Total",
+      "active": "Active", 
+      "completed": "Completed"
+    },
+    "priority": {
+      "label": "Priority",
+      "low": "Low Priority",
+      "medium": "Medium Priority", 
+      "high": "High Priority"
+    },
+    "status": {
+      "all": "All Todos",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "titleAZ": "Title A-Z",
+      "titleZA": "Title Z-A",
+      "highPriority": "High Priority First",
+      "lowPriority": "Low Priority First",
+      "dueSoon": "Due Date (Earliest)",
+      "dueLater": "Due Date (Latest)"
+    },
+    "quickActions": {
+      "highPriorityActive": "High Priority Active",
+      "dueSoon": "Due Soon",
+      "recentlyCompleted": "Recently Completed"
+    },
+    "form": {
+      "title": {
+        "label": "Title",
+        "placeholder": "Enter todo title...",
+        "required": "Title is required"
+      },
+      "description": {
+        "label": "Description", 
+        "placeholder": "Add more details about this task..."
+      },
+      "dueDate": {
+        "label": "Due Date"
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "create": "Create Todo",
+      "update": "Update Todo"
+    },
+    "meta": {
+      "overdue": "Overdue",
+      "dueSoon": "Due Soon",
+      "created": "Created"
+    },
+    "confirmDelete": "Are you sure you want to delete this todo?",
+    "tips": {
+      "title": "Tips:",
+      "items": [
+        "Use clear, actionable titles for your todos",
+        "Set due dates to help prioritize your tasks", 
+        "Use high priority for urgent tasks",
+        "Add detailed descriptions for complex tasks"
+      ]
+    },
+    "errors": {
+      "createFailed": "Failed to create todo",
+      "updateFailed": "Failed to update todo",
+      "deleteFailed": "Failed to delete todo",
+      "loadFailed": "Failed to load todos",
+      "unexpected": "An unexpected error occurred"
+    }
+  }
+}
