@@ -1,4 +1,5 @@
-// src/lib/actions/trips.ts
+// src/lib/actions/trips.ts - Fixed version with proper error handling
+
 "use server";
 
 import { createServerClient } from "../pocketbase/server";
@@ -42,20 +43,6 @@ export async function createTrip(formData: FormData): Promise<TripResult> {
   const formattedStartDateTime = formatDateTime(start_datetime);
   const formattedEndDateTime = formatDateTime(end_datetime);
 
-  console.log("Raw form data:", {
-    start_datetime,
-    end_datetime,
-    username,
-    target,
-    station,
-    driver
-  });
-
-  console.log("Formatted datetimes:", {
-    start: formattedStartDateTime,
-    end: formattedEndDateTime
-  });
-
   const tripData = {
     start_datetime: formattedStartDateTime,
     username,
@@ -71,8 +58,6 @@ export async function createTrip(formData: FormData): Promise<TripResult> {
     user: client.authStore.model.id,
   };
 
-  console.log("Final trip data being sent to PocketBase:", tripData);
-
   try {
     const trip = await client.collection("trips").create(tripData);
 
@@ -81,8 +66,6 @@ export async function createTrip(formData: FormData): Promise<TripResult> {
   } catch (error) {
     console.error("Create trip error:", error);
     if (error instanceof ClientResponseError) {
-      console.log("Error status:", error.status);
-      console.log("Error data:", error.data);
       return { error: `Creation failed: ${error.message}. Details: ${JSON.stringify(error.data)}` };
     }
     return { error: "Failed to create trip" };
@@ -184,6 +167,7 @@ export async function getTrips(filter?: string, sort?: string, page: number = 1,
   }
 }
 
+// Fixed getAllTrips function that properly handles sorting
 export async function getAllTrips(page: number = 1, perPage: number = 10, sort?: string) {
   const client = await createServerClient();
 
@@ -192,14 +176,90 @@ export async function getAllTrips(page: number = 1, perPage: number = 10, sort?:
   }
 
   try {
+    // Use the provided sort parameter or default to "-start_datetime"
+    const sortOrder = sort || "-start_datetime";
+    
     const trips = await client.collection("trips").getList(page, perPage, {
-      sort: sort || "-start_datetime",
+      sort: sortOrder, // Now properly uses the sort parameter
       expand: "user,username", // Expand both user and username relations
     });
 
     return trips;
   } catch (error) {
     console.error("Get all trips error:", error);
+    throw error;
+  }
+}
+
+// Enhanced version with filtering support
+export async function getAllTripsWithFilters(
+  page: number = 1, 
+  perPage: number = 10, 
+  sort?: string,
+  filters?: {
+    target?: string;
+    locomotive?: string;
+    search?: string;
+  }
+) {
+  const client = await createServerClient();
+
+  if (!client.authStore.model?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  try {
+    // Build filter query
+    let filterQuery = "";
+    const filterParts: string[] = [];
+
+    // Filter by target
+    if (filters?.target) {
+      filterParts.push(`target = "${filters.target}"`);
+    }
+
+    // Filter by locomotive
+    if (filters?.locomotive) {
+      filterParts.push(`locomotive = "${filters.locomotive}"`);
+    }
+
+    // Search across multiple fields
+    if (filters?.search) {
+      const searchTerm = filters.search;
+      const searchParts = [
+        `station ~ "${searchTerm}"`,
+        `route ~ "${searchTerm}"`,
+        `train_number ~ "${searchTerm}"`,
+        `driver ~ "${searchTerm}"`,
+        `assistant_driver ~ "${searchTerm}"`,
+        `locomotive_number ~ "${searchTerm}"`
+      ];
+      filterParts.push(`(${searchParts.join(" || ")})`);
+    }
+
+    // Combine all filters
+    if (filterParts.length > 0) {
+      filterQuery = filterParts.join(" && ");
+    }
+
+    // Use the provided sort parameter or default to "-start_datetime"
+    const sortOrder = sort || "-start_datetime";
+    
+    const options: any = {
+      sort: sortOrder,
+      expand: "user,username", // Expand both user and username relations
+    };
+
+    // Only add filter if we have one
+    if (filterQuery) {
+      options.filter = filterQuery;
+    }
+
+    const trips = await client.collection("trips").getList(page, perPage, options);
+
+    return trips;
+  } catch (error) {
+    console.error("Get all trips with filters error:", error);
     throw error;
   }
 }

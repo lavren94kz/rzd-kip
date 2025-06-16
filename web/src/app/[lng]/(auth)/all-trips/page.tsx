@@ -1,8 +1,8 @@
-// src/app/[lng]/(auth)/all-trips/page.tsx
+// src/app/[lng]/(auth)/all-trips/page.tsx - Fixed with proper types
 import { createServerClient } from "@/lib/pocketbase/server";
 import { TripsTable } from "../trips/components/trips-table";
 import { Eye } from "lucide-react";
-import { getAllTrips } from "@/lib/actions/trips";
+import { getAllTripsWithFilters } from "@/lib/actions/trips";
 
 interface AllTripsPageProps {
   params: Promise<{ lng: string }>;
@@ -33,8 +33,12 @@ export default async function AllTripsPage({
   const perPage = 20; // More items per page for table view
 
   try {
-    // Apply server-side sorting if specified
-    trips = await getAllTrips(currentPage, perPage, sort);
+    // Use the enhanced function with filtering support
+    trips = await getAllTripsWithFilters(currentPage, perPage, sort, {
+      target,
+      locomotive,
+      search
+    });
     
   } catch (error) {
     console.error("Failed to fetch all trips:", error);
@@ -72,7 +76,7 @@ export default async function AllTripsPage({
 
       {/* Trips Table Component */}
       <TripsTable 
-        initialTrips={trips.items} 
+        initialTrips={trips.items}
         lng={lng}
         currentPage={currentPage}
         totalPages={trips.totalPages}

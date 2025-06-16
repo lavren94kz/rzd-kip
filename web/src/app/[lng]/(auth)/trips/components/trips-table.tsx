@@ -1,14 +1,14 @@
-// src/app/[lng]/(auth)/trips/components/trips-table.tsx
+// src/app/[lng]/(auth)/trips/components/trips-table.tsx - Fixed TypeScript version
 "use client";
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TripsResponse } from "@/lib/pocketbase/types";
+import { TripsResponse, UsersResponse, TripsWithUserExpand } from "@/lib/pocketbase/types";
 import { Search, Filter, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface TripsTableProps {
-  initialTrips: TripsResponse[];
+  initialTrips: TripsWithUserExpand[];
   lng: string;
   currentPage: number;
   totalPages: number;
@@ -115,6 +115,17 @@ export function TripsTable({
     }
   };
 
+  // Helper function to get user display name with proper type safety
+  const getUserDisplayName = (trip: TripsWithUserExpand): string => {
+    if (trip.expand?.username) {
+      return trip.expand.username.name || trip.expand.username.email || 'Unknown User';
+    }
+    if (trip.expand?.user) {
+      return trip.expand.user.name || trip.expand.user.email || 'Unknown User';
+    }
+    return 'Unknown User';
+  };
+
   const targetOptions = [
     { value: "", label: "All Targets" },
     { value: "KIP", label: "KIP" },
@@ -218,6 +229,14 @@ export function TripsTable({
         </div>
       </div>
 
+      {/* Current Sort Display */}
+      <div className="bg-info/10 border border-info/30 rounded-lg p-3">
+        <p className="text-sm text-info">
+          <strong>Current Sort:</strong> {currentSort || "none"} 
+          {currentSort?.startsWith("-") ? " (Descending)" : " (Ascending)"}
+        </p>
+      </div>
+
       {/* Trips Table */}
       <div className="bg-base-100 rounded-lg shadow-md overflow-hidden">
         {trips.length === 0 ? (
@@ -232,26 +251,20 @@ export function TripsTable({
               <thead>
                 <tr>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("start_datetime")}
+                    title="Click to sort by start time"
                   >
                     <div className="flex items-center gap-2">
                       Start Time
                       {getSortIcon("start_datetime")}
                     </div>
                   </th>
+                  <th>User</th>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
-                    onClick={() => handleSort("username")}
-                  >
-                    <div className="flex items-center gap-2">
-                      User
-                      {getSortIcon("username")}
-                    </div>
-                  </th>
-                  <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("target")}
+                    title="Click to sort by target"
                   >
                     <div className="flex items-center gap-2">
                       Target
@@ -259,8 +272,9 @@ export function TripsTable({
                     </div>
                   </th>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("station")}
+                    title="Click to sort by station"
                   >
                     <div className="flex items-center gap-2">
                       Station
@@ -271,8 +285,9 @@ export function TripsTable({
                   <th>Driver</th>
                   <th>Assistant</th>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("train_number")}
+                    title="Click to sort by train number"
                   >
                     <div className="flex items-center gap-2">
                       Train #
@@ -280,8 +295,9 @@ export function TripsTable({
                     </div>
                   </th>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("locomotive")}
+                    title="Click to sort by locomotive"
                   >
                     <div className="flex items-center gap-2">
                       Locomotive
@@ -289,8 +305,9 @@ export function TripsTable({
                     </div>
                   </th>
                   <th 
-                    className="cursor-pointer hover:bg-base-200"
+                    className="cursor-pointer hover:bg-base-200 transition-colors"
                     onClick={() => handleSort("end_datetime")}
+                    title="Click to sort by end time"
                   >
                     <div className="flex items-center gap-2">
                       End Time
@@ -309,7 +326,7 @@ export function TripsTable({
                     </td>
                     <td>
                       <div className="font-medium">
-                        {trip.expand?.username?.name || trip.expand?.username?.email || 'Unknown User'}
+                        {getUserDisplayName(trip)}
                       </div>
                     </td>
                     <td>

@@ -1,10 +1,11 @@
+// src/lib/pocketbase/types.ts - Add helper types for expanded relations
+
 /**
  * This file was @generated using pocketbase-typegen
  */
 
 import type PocketBase from "pocketbase";
 import type { RecordService } from "pocketbase";
-
 
 export type TripsRecord = {
   created?: IsoDateString;
@@ -27,6 +28,17 @@ export type TripsRecord = {
 export type TripsResponse<Texpand = unknown> = Required<TripsRecord> &
   BaseSystemFields<Texpand>;
 
+// Helper types for expanded relations
+export type TripsWithUserExpand = TripsResponse<{
+  username?: UsersResponse;
+  user?: UsersResponse;
+}>;
+
+export type TripsWithAllExpands = TripsResponse<{
+  username?: UsersResponse;
+  user?: UsersResponse;
+}>;
+
 // Update Collections enum
 export enum Collections {
   Authorigins = "_authOrigins",
@@ -36,7 +48,7 @@ export enum Collections {
   Superusers = "_superusers",
   Users = "users",
   Todos = "todos",
-  Trips = "trips", // Add this line
+  Trips = "trips",
 }
 
 // Alias types for improved usability
@@ -161,7 +173,7 @@ export type CollectionRecords = {
   _superusers: SuperusersRecord;
   users: UsersRecord;
   todos: TodosRecord;
-  trips: TripsRecord; // Add this line
+  trips: TripsRecord;
 };
 
 export type CollectionResponses = {
@@ -172,7 +184,7 @@ export type CollectionResponses = {
   _superusers: SuperusersResponse;
   users: UsersResponse;
   todos: TodosResponse;
-  trips: TripsResponse; // Add this line
+  trips: TripsResponse;
 };
 
 // Type for usage with type asserted PocketBase instance
@@ -186,6 +198,5 @@ export type TypedPocketBase = PocketBase & {
   collection(idOrName: "_superusers"): RecordService<SuperusersResponse>;
   collection(idOrName: "users"): RecordService<UsersResponse>;
   collection(idOrName: "todos"): RecordService<TodosResponse>;
-  collection(idOrName: "trips"): RecordService<TripsResponse>; // Add this line
+  collection(idOrName: "trips"): RecordService<TripsResponse>;
 };
-
