@@ -1,16 +1,24 @@
-// src/lib/actions/trips.ts - Fixed version with proper error handling
+// src/lib/actions/trips.ts - Fixed version with proper typing
 
 "use server";
 
 import { createServerClient } from "../pocketbase/server";
 import { revalidatePath } from "next/cache";
 import { ClientResponseError } from "pocketbase";
-import { TripsRecord } from "../pocketbase/types";
+import { TripsRecord, TripsWithUserExpand } from "../pocketbase/types";
 
 interface TripResult {
   error?: string;
   success?: boolean;
   trip?: TripsRecord;
+}
+
+interface TripsListResult {
+  items: TripsWithUserExpand[];
+  totalItems: number;
+  totalPages: number;
+  page: number;
+  perPage: number;
 }
 
 // Helper function to format datetime for PocketBase
@@ -140,7 +148,7 @@ export async function deleteTrip(id: string): Promise<TripResult> {
   }
 }
 
-export async function getTrips(filter?: string, sort?: string, page: number = 1, perPage: number = 10) {
+export async function getTrips(filter?: string, sort?: string, page: number = 1, perPage: number = 10): Promise<TripsListResult> {
   const client = await createServerClient();
 
   if (!client.authStore.model?.id) {
@@ -160,15 +168,21 @@ export async function getTrips(filter?: string, sort?: string, page: number = 1,
       expand: "username", // Expand the username relation to get user details
     });
 
-    return trips;
+    return {
+      items: trips.items as TripsWithUserExpand[],
+      totalItems: trips.totalItems,
+      totalPages: trips.totalPages,
+      page: trips.page,
+      perPage: trips.perPage,
+    };
   } catch (error) {
     console.error("Get trips error:", error);
     throw error;
   }
 }
 
-// Fixed getAllTrips function that properly handles sorting
-export async function getAllTrips(page: number = 1, perPage: number = 10, sort?: string) {
+// Fixed getAllTrips function that properly handles sorting and returns correct type
+export async function getAllTrips(page: number = 1, perPage: number = 10, sort?: string): Promise<TripsListResult> {
   const client = await createServerClient();
 
   if (!client.authStore.model?.id) {
@@ -180,18 +194,24 @@ export async function getAllTrips(page: number = 1, perPage: number = 10, sort?:
     const sortOrder = sort || "-start_datetime";
     
     const trips = await client.collection("trips").getList(page, perPage, {
-      sort: sortOrder, // Now properly uses the sort parameter
+      sort: sortOrder,
       expand: "user,username", // Expand both user and username relations
     });
 
-    return trips;
+    return {
+      items: trips.items as TripsWithUserExpand[],
+      totalItems: trips.totalItems,
+      totalPages: trips.totalPages,
+      page: trips.page,
+      perPage: trips.perPage,
+    };
   } catch (error) {
     console.error("Get all trips error:", error);
     throw error;
   }
 }
 
-// Enhanced version with filtering support
+// Enhanced version with filtering support and proper typing
 export async function getAllTripsWithFilters(
   page: number = 1, 
   perPage: number = 10, 
@@ -201,7 +221,7 @@ export async function getAllTripsWithFilters(
     locomotive?: string;
     search?: string;
   }
-) {
+): Promise<TripsListResult> {
   const client = await createServerClient();
 
   if (!client.authStore.model?.id) {
@@ -245,7 +265,11 @@ export async function getAllTripsWithFilters(
     // Use the provided sort parameter or default to "-start_datetime"
     const sortOrder = sort || "-start_datetime";
     
-    const options: any = {
+    const options: {
+      sort: string;
+      expand: string;
+      filter?: string;
+    } = {
       sort: sortOrder,
       expand: "user,username", // Expand both user and username relations
     };
@@ -257,7 +281,13 @@ export async function getAllTripsWithFilters(
 
     const trips = await client.collection("trips").getList(page, perPage, options);
 
-    return trips;
+    return {
+      items: trips.items as TripsWithUserExpand[],
+      totalItems: trips.totalItems,
+      totalPages: trips.totalPages,
+      page: trips.page,
+      perPage: trips.perPage,
+    };
   } catch (error) {
     console.error("Get all trips with filters error:", error);
     throw error;

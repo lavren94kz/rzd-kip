@@ -57,7 +57,7 @@ export default async function TripsPage({
     trips = await getTrips(filterQuery, "-start_datetime", currentPage, perPage);
   } catch (error) {
     console.error("Failed to fetch trips:", error);
-    trips = { items: [], totalItems: 0, totalPages: 0 };
+    trips = { items: [], totalItems: 0, totalPages: 0, page: 1, perPage: 10 };
   }
 
   return (

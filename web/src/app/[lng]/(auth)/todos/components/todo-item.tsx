@@ -6,7 +6,6 @@ import { TodosResponse } from "@/lib/pocketbase/types";
 import { toggleTodoComplete, deleteTodo } from "@/lib/actions/todos";
 import { Check, Clock, Edit, Trash2, Calendar, Flag } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 interface TodoItemProps {
   todo: TodosResponse;
@@ -18,7 +17,6 @@ interface TodoItemProps {
 export function TodoItem({ todo, lng, onUpdate, onDelete }: TodoItemProps) {
   const [isToggling, setIsToggling] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { t } = useTranslation();
 
   const handleToggleComplete = async () => {
     setIsToggling(true);

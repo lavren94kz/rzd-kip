@@ -7,7 +7,6 @@ import { createTrip, updateTrip, getAllUsers } from "@/lib/actions/trips";
 import { TripsResponse, UsersResponse } from "@/lib/pocketbase/types";
 import { Save, ArrowLeft, Calendar, User, MapPin, Train, Truck } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 interface TripFormProps {
   lng: string;
@@ -21,7 +20,6 @@ export function TripForm({ lng, trip, mode }: TripFormProps) {
   const [users, setUsers] = useState<UsersResponse[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(true);
   const router = useRouter();
-  const { t } = useTranslation();
 
   // Load users for the username dropdown
   useEffect(() => {
@@ -335,7 +333,7 @@ export function TripForm({ lng, trip, mode }: TripFormProps) {
         <ul className="text-sm text-base-content/70 space-y-1">
           <li>• Enter accurate date and time information</li>
           <li>• Select the correct user from the dropdown</li>
-          <li>• Use the format "Last name I.I., #personnel_number" for driver information</li>
+          <li>• Use the format &quot;Last name I.I., #personnel_number&quot; for driver information</li>
           <li>• Assistant driver field is optional</li>
           <li>• Double-check locomotive and train numbers</li>
         </ul>

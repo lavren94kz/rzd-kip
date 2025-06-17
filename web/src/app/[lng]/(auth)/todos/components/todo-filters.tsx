@@ -3,7 +3,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { SortAsc, SortDesc } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 interface TodoFiltersProps {
   lng: string;
@@ -14,7 +13,6 @@ interface TodoFiltersProps {
 export function TodoFilters({ lng, currentFilter, currentSort }: TodoFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useTranslation();
 
   const updateParams = (key: string, value: string | null) => {
     const params = new URLSearchParams(searchParams.toString());

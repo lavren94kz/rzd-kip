@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TripsResponse, UsersResponse } from "@/lib/pocketbase/types";
 import { TripItem } from "./trip-item";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 // Define the expanded trip type
 type TripWithExpand = TripsResponse<{
@@ -35,7 +34,6 @@ export function TripList({
   const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useTranslation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,13 +1,12 @@
 // src/app/[lng]/(auth)/todos/components/todo-list.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TodosResponse } from "@/lib/pocketbase/types";
 import { TodoItem } from "./todo-item";
 import { TodoFilters } from "./todo-filters";
-import { Search, SortAsc, Filter } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { Search, Filter } from "lucide-react";
 
 interface TodoListProps {
   initialTodos: TodosResponse[];
@@ -29,7 +28,6 @@ export function TodoList({
   const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useTranslation();
 
   // Filter todos client-side for immediate feedback
   const filteredTodos = todos.filter(todo => {

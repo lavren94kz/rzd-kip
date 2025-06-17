@@ -7,7 +7,6 @@ import { createTodo, updateTodo } from "@/lib/actions/todos";
 import { TodosResponse } from "@/lib/pocketbase/types";
 import { Save, ArrowLeft, Calendar, Flag, FileText } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 interface TodoFormProps {
   lng: string;
@@ -19,7 +18,6 @@ export function TodoForm({ lng, todo, mode }: TodoFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { t } = useTranslation();
 
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);

@@ -4,12 +4,12 @@
 import { createServerClient } from "../pocketbase/server";
 import { revalidatePath } from "next/cache";
 import { ClientResponseError } from "pocketbase";
-import { TodosRecord } from "../pocketbase/types";
+import { TodosResponse } from "../pocketbase/types";
 
 interface TodoResult {
   error?: string;
   success?: boolean;
-  todo?: TodosRecord;
+  todo?: TodosResponse;
 }
 
 export async function createTodo(formData: FormData): Promise<TodoResult> {
@@ -35,7 +35,7 @@ export async function createTodo(formData: FormData): Promise<TodoResult> {
     });
 
     revalidatePath("/", "layout");
-    return { success: true, todo };
+    return { success: true, todo: todo as TodosResponse };
   } catch (error) {
     console.error("Create todo error:", error);
     if (error instanceof ClientResponseError) {
@@ -69,7 +69,7 @@ export async function updateTodo(
     });
 
     revalidatePath("/", "layout");
-    return { success: true, todo };
+    return { success: true, todo: todo as TodosResponse };
   } catch (error) {
     console.error("Update todo error:", error);
     if (error instanceof ClientResponseError) {
@@ -96,7 +96,7 @@ export async function toggleTodoComplete(id: string): Promise<TodoResult> {
     });
 
     revalidatePath("/", "layout");
-    return { success: true, todo };
+    return { success: true, todo: todo as TodosResponse };
   } catch (error) {
     console.error("Toggle todo error:", error);
     if (error instanceof ClientResponseError) {

@@ -3,9 +3,8 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TripsResponse, UsersResponse, TripsWithUserExpand } from "@/lib/pocketbase/types";
+import { TripsWithUserExpand } from "@/lib/pocketbase/types";
 import { Search, Filter, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 interface TripsTableProps {
   initialTrips: TripsWithUserExpand[];
@@ -24,12 +23,10 @@ export function TripsTable({
   totalItems,
   currentSort = "-start_datetime"
 }: TripsTableProps) {
-  const [trips, setTrips] = useState(initialTrips);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useTranslation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -239,7 +236,7 @@ export function TripsTable({
 
       {/* Trips Table */}
       <div className="bg-base-100 rounded-lg shadow-md overflow-hidden">
-        {trips.length === 0 ? (
+        {initialTrips.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-base-content/60">
               {searchTerm ? "No trips match your criteria" : "No trips yet"}
@@ -317,7 +314,7 @@ export function TripsTable({
                 </tr>
               </thead>
               <tbody>
-                {trips.map((trip) => (
+                {initialTrips.map((trip) => (
                   <tr key={trip.id} className="hover">
                     <td>
                       <div className="text-sm">

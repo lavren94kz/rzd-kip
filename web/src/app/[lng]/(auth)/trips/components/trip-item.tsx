@@ -6,7 +6,6 @@ import { TripsResponse, UsersResponse } from "@/lib/pocketbase/types";
 import { deleteTrip } from "@/lib/actions/trips";
 import { Edit, Trash2, Calendar, User, MapPin, Train, Truck, Clock } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 // Define the expanded trip type with proper username relation
 type TripWithExpand = TripsResponse<{
@@ -22,7 +21,6 @@ interface TripItemProps {
 
 export function TripItem({ trip, lng, onDelete, isReadOnly = false }: TripItemProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const { t } = useTranslation();
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this trip?")) {
