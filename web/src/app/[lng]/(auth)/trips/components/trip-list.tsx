@@ -3,13 +3,18 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TripsResponse } from "@/lib/pocketbase/types";
+import { TripsResponse, UsersResponse } from "@/lib/pocketbase/types";
 import { TripItem } from "./trip-item";
 import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+// Define the expanded trip type
+type TripWithExpand = TripsResponse<{
+  username?: UsersResponse;
+}>;
+
 interface TripListProps {
-  initialTrips: TripsResponse[];
+  initialTrips: TripWithExpand[];
   lng: string;
   currentPage: number;
   totalPages: number;

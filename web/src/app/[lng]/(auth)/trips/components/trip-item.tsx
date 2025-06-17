@@ -2,14 +2,19 @@
 "use client";
 
 import { useState } from "react";
-import { TripsResponse } from "@/lib/pocketbase/types";
+import { TripsResponse, UsersResponse } from "@/lib/pocketbase/types";
 import { deleteTrip } from "@/lib/actions/trips";
 import { Edit, Trash2, Calendar, User, MapPin, Train, Truck, Clock } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
+// Define the expanded trip type with proper username relation
+type TripWithExpand = TripsResponse<{
+  username?: UsersResponse;
+}>;
+
 interface TripItemProps {
-  trip: TripsResponse;
+  trip: TripWithExpand;
   lng: string;
   onDelete: (tripId: string) => void;
   isReadOnly?: boolean;
@@ -67,6 +72,14 @@ export function TripItem({ trip, lng, onDelete, isReadOnly = false }: TripItemPr
     }
   };
 
+  // Helper function to get user display name
+  const getUserDisplayName = (): string => {
+    if (trip.expand?.username) {
+      return trip.expand.username.name || trip.expand.username.email || 'Unknown User';
+    }
+    return 'Unknown User';
+  };
+
   return (
     <div className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
       <div className="card-body p-4">
@@ -92,7 +105,7 @@ export function TripItem({ trip, lng, onDelete, isReadOnly = false }: TripItemPr
               <div className="flex items-center gap-2">
                 <User className="h-3 w-3 text-base-content/60" />
                 <span className="text-base-content/80">
-                  <strong>User:</strong> {trip.expand?.username?.name || trip.expand?.username?.email || 'Unknown User'}
+                  <strong>User:</strong> {getUserDisplayName()}
                 </span>
               </div>
 
